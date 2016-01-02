@@ -102,29 +102,7 @@
 		$source = decrypt($token,$key);
 		return $source != "" ? str_replace(session_id(),"",$source) : false;
     }
-	// /**
-    // * 写入token
-    // * 
-    // * @param string $token
-    // */
-
-    // function setToken($token){
-		// $tokens = getTokens();
-		// $tokens[] = $token;
-		// session(C('SESSION_KEY_TOKEN'),$tokens);
-    // }
-    /**
-    * 记录被使用的token,实际是向session 的一个数组里加入一个元素，说明这个token以经使用过，以避免数据重复提交。
-    *
-    * @param string $token
-    */
-
-    // function dropToken($token){
-		// $tokens = getTokens();
-		// $tokens[] = $token;
-		// $_SESSION[C('SESSION_KEY_TOKEN')]=$tokens;
-    // }
-
+	
     /**
     * 检查是否为指定的Token
     * @param string $token 要检查的token值
@@ -175,10 +153,14 @@
 	}
 	/**
     * 检查是token登录是否合法
-    * @param array $usr_info 要检查的token值
+    * @param array $token 要检查的token值
     * @return boolean/token
     */
-	function isTokenL($usr_info){
+	function isTokenL($token){
+		$usr_info=array(
+			'token'=>$token,
+		);
+		
 		//判断是否有token若有必然在此次登录有效期内
 		if(session(C('SESSION_KEY_TOKEN'))!=null){
 			//判断是否和session一致，一致说明还处在本次登录有效期内
@@ -190,21 +172,23 @@
 			}
 		}
 		//查询数据库
-
 		$usrs = M('usr');
 		if($usrs->create($usr_info)){
 			$map['Id']=$usr_info['Id'];
 			$list=$usrs->where($map)->find();
-			//若和上次的一致且在有效期内则认为处于上次有效免密码登录时间内
-			if( ($usr_info['token'] != null) && ($list['token']==$usr_info['token'])){
+			//若用户提交token为null，token和数据库不符，当前时间减去授予时间大于有效时间，则该token是无效的
+			if( ($usr_info['token'] != null) 
+				&& ($list['token']==$usr_info['token'])
+				&& (time()-strtotime($list['granttime'])) <= $list['expiretime']){
 				//更新token
 				$token =createToken($usr_info['id']);
-				//清空token
+				//session清空token
 				session(C('SESSION_KEY_TOKEN'),null);
-				//写入token
+				//session写入token
 				session(C('SESSION_KEY_TOKEN'),$token);
 				$usr_info['token']=$token;
 				$usr_info['grantTime']=date('Y-m-d H:i:s', time());
+				//更新数据库token，和授予时间
 				$list=$usrs->where($map)->save($usr_info);
 				return  $token;
 			}else{
@@ -246,15 +230,11 @@
 			return TRUE;
 		}
 	}
+	/**
+    * 从客户端获取登陆信息
+    * @return $value-token
+    */
 	function getClientLToken(){
 		$value=cookie('login');
 		return $value['token'];
-	}
-	function createToken1(){
-		$params='UTgCZlU2U2AFMwRwDXoBNFsuDGFXcAI1CjMEPgV0AycAdVA\/AjEDaApnVDkBNgYzU2tRYA==';
-		$form =decrypt($params,null);
-		echo $form.'<br/>';
-		echo $source.'<br/>';
-		echo session_id().'<br/>';
-		echo json_encode(getTokens()).'<br/>';
 	}

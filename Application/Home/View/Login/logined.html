@@ -6,13 +6,13 @@
 
     <title>邮件管理系统</title>
 
-    <link href="/public/css/metro.css" rel="stylesheet">
-    <link href="/public/css/metro-icons.css" rel="stylesheet">
+    <link href="_CSS_metro.css" rel="stylesheet">
+    <link href="_CSS_metro-icons.css" rel="stylesheet">
 
-    <script src="/public/script/jquery-2.1.4.min.js"></script>
-    <script src="/public/script/metro.js"></script>
-    <script src="/public/script/public.js"></script>
-	<script src="/public/script/select2.min.js"></script>
+    <script src="_SCRIPT_jquery-2.1.4.min.js"></script>
+    <script src="_SCRIPT_metro.js"></script>
+    <script src="_SCRIPT_public.js"></script>
+	<script src="_SCRIPT_select2.min.js"></script>
     <style>
 		.wizard2 .step {
 		  width: 100%;
@@ -98,7 +98,7 @@
 		var tlogin;
 		$.post(
 			"/index.php/get/getChecked",
-			tlogin,
+			{'page':'1'},
 			function(data){
 				data = eval('('+data+')');
 				$("#OrderTable").html("");//清空info内容
@@ -117,14 +117,26 @@
 								"<td>" + item.postorid + "</td>"+
 							"</tr>");
 				});
+				$("#page").html("");
+				$("#page").append(data.page+"/"+data.maxPage);
+				data.page=data.page-0;
+				if(data.page>=2){
+					$("#previousPage").attr('onclick','');
+					$("#previousPage").attr('onclick','loadUnchecked('+(data.page-1)+')');
+					
+				}
+				if(data.maxPage>1){
+					$("#nextPage").attr('onclick','');
+					$("#nextPage").attr('onclick','loadUnchecked('+(data.page+1)+')');
+				}
 			}
 		);
 	}
-	function loadUnchecked(){
-		var tlogin=stringToJson(getCookie("login"));
+	function loadUnchecked(page){
+		var tlogin;
 		$.post(
 			"/index.php/get/getUnchecked",
-			tlogin,
+			{'page':page},
 			function(data){
 				data = eval('('+data+')');
 				$("#OrderTable").html("");//清空info内容
@@ -144,6 +156,18 @@
 								"<td>" + item.postorid + "</td>"+
 							"</tr>");
 				});
+				$("#page").html("");
+				$("#page").append(data.page+"/"+data.maxPage);
+				data.page=data.page-0;
+				if(data.page>=2){
+					$("#previousPage").attr('onclick','');
+					$("#previousPage").attr('onclick','loadUnchecked('+(data.page-1)+')');
+					
+				}
+				if(data.maxPage>1){
+					$("#nextPage").attr('onclick','');
+					$("#nextPage").attr('onclick','loadUnchecked('+(data.page+1)+')');
+				}
 			}
 		);
 	}
@@ -225,7 +249,7 @@
 		}
 		//切换到尚未收件列表
 		function turnUnreceived(){
-			$("#main").load("/index.php/get/load?page=TurnUnchecked",function(){loadUnchecked();});
+			$("#main").load("/index.php/get/load?page=TurnUnchecked",function(){loadUnchecked(1);});
 		}
 		//切换到设置页面
 		function changeToConfig(){
@@ -287,7 +311,7 @@
         </ul>
 
         <div class="app-bar-element place-right">
-            <span class="dropdown-toggle" id="username">{$username}<span class="mif-cog"></span></span>
+            <span class="dropdown-toggle" id="username">{$list.name}<span class="mif-cog"></span></span>
             <div class="app-bar-drop-container padding10 place-right no-margin-top block-shadow" data-role="dropdown" data-no-close="true" style="width: 220px">
                 <h2 class="text-light">个人中心</h2>
                 <ul class="unstyled-list">
@@ -366,27 +390,30 @@
 						</div>
 						<div class="list">
 							<div class="list-content">
-								<span class="list-title">你上一次的登陆IP为：</span>
+								<span class="list-title">你上一次的登陆IP为：{$list.lastip}</span>
 								
 							</div>
 						</div>
 						<div class="list">
 							<div class="list-content">
-								<span class="list-title">你上一次的登陆日期为：</span>
+								<span class="list-title">你上一次的登陆日期为：{$list.lastlogin}</span>
 								
 							</div>
 						</div>
 						<div class="list">
 							<div class="list-content">
-								<span class="list-title">你现在的登陆有效期为：</span>
-								<div class="input-control" data-role="select">
-									<select>
-										<option>12小时</option>
-										<option>24小时</option>
-										<option>1天</option>
-										<option>2天</option>
-										<option>15天</option>
-										<option>30天</option>
+								<span class="list-title">你现在的登陆有效期为：{$list['expiretime']/3600}小时
+									<input type="button" value="更改"   onclick="">
+								</span>
+							
+								<div class="input-control" data-role="select" id="expiretime" >
+									<select class="select">
+										<option value="3600">1小时</option>
+										<option value="43200">12小时</option>
+										<option value="86400">24小时</option>
+										<option value="172800">2天</option>
+										<option value="1296000">15天</option>
+										<option value="2592000">30天</option>
 									</select>
 								</div>
 								<input type="button" value="保存">
