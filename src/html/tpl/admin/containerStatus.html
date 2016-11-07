@@ -1,0 +1,65 @@
+<p style="padding-top:15px;">您现在的位置是:   <a href="#/unnoticed">货柜操作</a>>><a href="#/unnoticed">货柜状态</a></p>	
+
+<hr class="thin bg-grayLighter">
+
+<h3>库存系统</h3>
+<hr class="thin bg-grayLighter">
+<div class="input-control" data-role="select" >
+	<div style="float:left;width:300px;margin: .15625rem 0;"><select class="select2" ng-model="nowPage" ng-options=" page.id as page.id  for page in pages"  ng-disabled="onloading"> </select></div>
+	<button class="button warning" ng-click="confirm()" style="float:left;">确认信息</button>
+</div>
+<div class="input-control">
+	
+</div>
+<div data-role="preloader" data-type="ring" data-style="dark" ng-show="onloading"></div>
+<div class="grid" style="text-align:center;" ng-hide="onloading">
+    <div class="row cells5">
+		<cedit class="cell" cdata="positions[1]['haveproduct']" text="1" ></cedit>
+		<cedit class="cell" cdata="positions[2]['haveproduct']" text="2" ></cedit>
+		<cedit class="cell" cdata="positions[3]['haveproduct']" text="3" ></cedit>
+
+		<cedit class="cell" cdata="positions[4]['haveproduct']" text="4" ></cedit>
+		<cedit class="cell" cdata="positions[5]['haveproduct']" text="5" ></cedit>
+    </div>
+	 <div class="row cells5">
+        <cedit class="cell" cdata="positions[6]['haveproduct']" text="6" ></cedit>
+        <cedit class="cell" cdata="positions[7]['haveproduct']" text="7" ></cedit>
+        <cedit class="cell" cdata="positions[8]['haveproduct']" text="8" ></cedit>
+        <cedit class="cell" cdata="positions[9]['haveproduct']" text="9" ></cedit>
+        <cedit class="cell" cdata="positions[10]['haveproduct']" text="10" ></cedit>
+    </div>
+    <div class="row cells6">
+        <cedit class="cell" cdata="positions[11]['haveproduct']" text="11" ></cedit>
+        <cedit class="cell colspan2" cdata="positions[12]['haveproduct']" text="12" ></cedit>
+        <cedit class="cell colspan2" cdata="positions[13]['haveproduct']" text="13" ></cedit>
+        <cedit class="cell" cdata="positions[15]['haveproduct']" text="15" ></cedit>
+    </div>
+    <div class="row cells6">
+        <cedit class="cell" cdata="positions[16]['haveproduct']" text="16" ></cedit>
+        <cedit class="cell colspan2" cdata="positions[17]['haveproduct']" text="17" ></cedit>
+        <cedit class="cell colspan2" cdata="positions[18]['haveproduct']" text="18" ></cedit>
+        <cedit class="cell" cdata="positions[19]['haveproduct']" text="19" ></cedit>
+    </div>
+    <div class="row cells8">
+        <cedit class="cell" cdata="positions[20]['haveproduct']" text="20" ></cedit>
+        <cedit class="cell" cdata="positions[21]['haveproduct']" text="21" ></cedit>
+        <cedit class="cell" cdata="positions[22]['haveproduct']" text="22" ></cedit>
+        <cedit class="cell" cdata="positions[23]['haveproduct']" text="23" ></cedit>
+        <cedit class="cell" cdata="positions[24]['haveproduct']" text="24" ></cedit>
+        <cedit class="cell" cdata="positions[25]['haveproduct']" text="25" ></cedit>
+        <cedit class="cell" cdata="positions[26]['haveproduct']" text="26" ></cedit>
+        <cedit class="cell" cdata="positions[27]['haveproduct']" text="27" ></cedit>
+    </div>
+    <div class="row cells8">
+        <cedit class="cell" cdata="positions[28]['haveproduct']" text="28" ></cedit>
+        <cedit class="cell" cdata="positions[29]['haveproduct']" text="29" ></cedit>
+        <cedit class="cell" cdata="positions[30]['haveproduct']" text="30" ></cedit>
+        <cedit class="cell" cdata="positions[31]['haveproduct']" text="31" ></cedit>
+        <cedit class="cell" cdata="positions[32]['haveproduct']" text="32" ></cedit>
+        <cedit class="cell" cdata="positions[33]['haveproduct']" text="33" ></cedit>
+        <cedit class="cell" cdata="positions[34]['haveproduct']" text="34" ></cedit>
+        <cedit class="cell" cdata="positions[35]['haveproduct']" text="35" ></cedit>
+    </div>
+</div>
+</div>
+</div>

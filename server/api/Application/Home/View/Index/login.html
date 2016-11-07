@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>入口</title>
+	<meta charset="UTF-8">
+    <link href="_CSS_metro.css" rel="stylesheet">
+    <link href="_CSS_metro-icons.css" rel="stylesheet">
+
+    <script src="_SCRIPT_jquery-2.1.4.min.js"></script>
+    <script src="_SCRIPT_metro.js"></script>
+    <script src="_SCRIPT_public.js"></script>
+ 
+    <style>
+        .login-form {
+            width: 25rem;
+            height: 18.75rem;
+            position: fixed;
+            top: 50%;
+            margin-top: -9.375rem;
+            left: 50%;
+            margin-left: -12.5rem;
+            background-color: #ffffff;
+            opacity: 0;
+            -webkit-transform: scale(.8);
+            transform: scale(.8);
+        }
+    </style>
+
+    <script>
+
+        $(function(){
+            var form = $(".login-form");
+
+            form.css({
+                opacity: 1,
+                "-webkit-transform": "scale(1)",
+                "transform": "scale(1)",
+                "-webkit-transition": ".5s",
+                "transition": ".5s"
+            });
+        });
+        </script>
+</head>
+<body class="bg-darkTeal">
+    <div class="login-form padding20 block-shadow">
+        <p><a href='_ENTER_login/login'><label>login</label></a></p>
+		<p><a href='_ENTER_import/import'><label>import</label></a></p>
+		<p><a href='_ENTER_import/check'><label>check</label></a></p>
+        <p><a href='_ENTER_mail/email'><label>email</label></a></p>
+        <p><a href='_ADMIN_index/index'><label>admin</label></a></p>
+    </div>
+    <div id="ss"></div>
+</body>
+</html>

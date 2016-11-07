@@ -1,0 +1,54 @@
+<p style="padding-top:15px;">您现在的位置是:   <a href="#/orderConf">快件操作</a><a href="#/orderConf">快件信息修改</a></p>
+<hr class="thin bg-grayLighter">
+<div class="input-control text" data-role="input">
+	<input type="text" ng-model="orderid" required placeholder="请输入订单编号"><button class="button warning" ng-click="confirm()">确认信息</button>
+</div>
+<p ng-hide="datahave">查无次订单号</p>
+<table ng-show="datahave" class="table striped hovered cell-hovered border bordered">
+	<tr><th>项目</th><th>内容</th><th>修改按钮</th></tr>
+    <tr>
+        <td>订单编号</td>
+        <td ng-bind="order['orderid']"></td>
+		<td><edit edata="order['orderid']"></edit></td>
+    </tr>    
+    <tr>
+        <td>用户手机号</td>
+        <td ng-bind="order['usrphonenumber']"></td>
+		<td><edit edata="order['usrphonenumber']"></edit></td>
+    </tr>    
+    <tr>
+        <td>订单信息</td>
+        <td ng-bind="order['orderinfo']"></td>
+		<td><edit edata="order['orderinfo']"></edit></td>
+    </tr>
+
+    <tr>
+        <td>用户id</td>
+        <td ng-bind="order['usrid']"></td>
+		<td><edit edata="order['usrid']"></edit></td>
+    </tr>
+    <tr>
+        <td>所在箱子</td>
+        <td ng-bind="order['positionid']"></td>
+		<td><edit edata="order['positionid']"></edit></td>
+    </tr>
+
+    <tr>
+        <td>送达时间</td>
+        <td ng-bind="order['importtime']"></td>
+		<td><edit edata="order['importtime']"></edit></td>
+    </tr>
+    <tr>
+        <td>取件时间</td>
+        <td ng-bind="order['exporttime']"></td>
+		<td><edit edata="order['exporttime']"></edit></td>
+    </tr>
+</table>
+    <!-- TODO:弹出框 -->
+    <div class="ice-modals" ng-show="editDisplay" ng-init="editDisplay=false">
+        <div class="masked">
+            this is edit box!
+        </div>
+        <div class="mask"></div>
+    </div>
+</div>

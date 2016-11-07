@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!-- common css -->
+    <link href="/css/main.min.css?rev=356ce954b66f4376d842a59c36f6440a" rel="stylesheet">
+    <link href="/css/all.min.css?rev=baecbcaf1e3b5606a9407654dc4fd6fc" rel="stylesheet">
+    <link href="/css/metro.min.css?rev=ccf7b49270b4bdcfb9606ddc87abb873" rel="stylesheet">
+    <link href="/css/metro-icons.min.css?rev=f079c4396891ecc6eb6ef9db80a52964" rel="stylesheet">
+    <link href="/js/laypage/skin/laypage.css" rel="stylesheet" >
+<title>你的邮件已经录入成功了</title>
+</head>
+
+<body style="text-align:center;">
+    <h3>你的邮件已经录入成功了</h3>
+    <p>详细情况如下所示</p>
+    <table class="table" border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <th  colspan="9">录入单</th>
+        </tr>
+        <tr>
+            <td>邮递员编号</td>
+            <td>录入时间</td>
+            <td>取件时间</td>
+            <td>库存位置</td>
+            <td>订单信息</td>
+            <td>客户名称</td>
+            <td>客户电话</td>
+            <td>客户id</td>
+            <td>订单号</td>
+        </tr>
+        <tr id="import">
+        </tr>
+    </table>
+    	<!-- common js -->
+	<script src="/js/jquery.min.js?rev=cccc7fc56e1d2b59e4e4fe7f9861d8ba"></script>
+    <script src="/js/metro.min.js?rev=57f1dbca946d6500d3cfc9baabbabc57"></script>
+	<script src="/js/all.min.js?rev=8971778a9cc0ad74eeea6d9ed8a7b87f"></script>
+	<script src="/js/laypage/laypage.js"></script>
+
+    <script>
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		if (r != null) return unescape(r[2]); return null; //返回参数值
+	}
+    $(document).ready(function() {
+        var orderId = getUrlParam("orderId");
+        $.ajax({
+            type: "post",
+            url: "/api/import/getOrder",
+            data: {
+                "orderId": orderId
+            },
+            dataType: "text",
+            success: function(data) {
+                data = JSON.parse( data);
+                loadInfo(data);
+            }
+        });
+    });
+    </script>
+    <script>
+    function loadInfo(data) {
+        $("#import").html(""); //清空info内容
+        var json = JSON.parse( data);
+        $("#import").append(
+            "</td>" +
+            "<td>" + json.result.postorid + "</td>" +
+            "<td>" + json.result.importtime + "</td>" +
+            "<td>" + json.result.exporttime + "</td>" +
+            "<td>" + json.result.positionid + "</td>" +
+            "<td>" + json.result.orderinfo + "</td>" +
+            "<td>" + json.result.usrname + "</td>" +
+            "<td>" + json.result.usrphonenumber + "</td>" +
+            "<td>" + json.result.usrid + "</td>" +
+            "<td>" + json.result.orderid + "</td>");
+
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!-- common css -->
+    <link href="/css/main.min.css?rev=356ce954b66f4376d842a59c36f6440a" rel="stylesheet">
+    <link href="/css/all.min.css?rev=baecbcaf1e3b5606a9407654dc4fd6fc" rel="stylesheet">
+    <link href="/css/metro.min.css?rev=ccf7b49270b4bdcfb9606ddc87abb873" rel="stylesheet">
+    <link href="/css/metro-icons.min.css?rev=f079c4396891ecc6eb6ef9db80a52964" rel="stylesheet">
+    <link href="/js/laypage/skin/laypage.css" rel="stylesheet" >
+</head>
+<body>
+<div class="padding20" style="width:40%;margin:auto;">
+	<div class="input-control text full-size" data-role="input">
+		<input type="text" name ="usrId" id="userid"  value="">
+		<button type="button" class="button" onclick="checkPost()">取件</button>
+	</div>
+	<table class="table border bordered">
+		<th>未收取快件单</th>
+		<tr>
+			<td  style="text-align: center;"><label class="input-control checkbox small-check">
+				<input type="checkbox" disabled>
+				<span class="check"></span>
+				<span class="caption"></span>
+                </label>
+			</td>
+			<td>订单号</td>
+			<td>录入时间</td>
+			<td>库存位置</td>
+		</tr>
+		<tbody id="import">
+			<tr><td  colspan="4" style="text-align: center;">暂无快件</td></tr>
+		</tbody>
+	</table>
+	<div id="loading">
+		<div data-role="preloader" data-type="ring" data-style="dark" ng-show="onloading"></div>
+	</div>
+</div>
+	<!-- common js -->
+	<script src="/js/jquery.min.js?rev=cccc7fc56e1d2b59e4e4fe7f9861d8ba"></script>
+    <script src="/js/metro.min.js?rev=57f1dbca946d6500d3cfc9baabbabc57"></script>
+	<script src="/js/all.min.js?rev=8971778a9cc0ad74eeea6d9ed8a7b87f"></script>
+	<script src="/js/laypage/laypage.js"></script>
+
+<script>
+	$(document).ready( function(){
+		$("#userid").keyup(function(){
+			var userid = $("#userid").prop("value");
+			if(userid.length<6)return false;
+			$("#loading").show();	
+			$.ajax({
+				type: "post",
+				url: "/api/import/getUncheckList",
+				data: {"usrId":userid},
+				dataType: "json",
+				success:
+					function(data){
+						loadInfo(data);
+						$("#loading").hide();	
+					}
+			});
+		});
+		var userid = $("#userid").prop("value");
+		$("#loading").hide();	
+	});
+</script>
+<script>
+	function loadInfo(data) {
+        $("#import").html("");//清空info内容
+		var json = JSON.parse(data);
+		if(json.result && json.result.length && json.result.length > 0 ){
+			$.each(json.result, function(i, item) {
+				$("#import").append(
+						"<tr></tr>"+
+						"<tr>"+
+							"<td  style='text-align: center;'>"+
+								"<label class='input-control checkbox'>"+
+									"<input type='checkbox' class='uncheck' id='check_" + i + "'"+" value='"+item.orderid+"'>"+
+									"<span class='check'></span>"+
+									"<span class='caption'></span>"+
+								"</label>"+
+							"</td>"+ 
+							"<td>" + item.orderid + "</td>"+
+							"<td>" + item.importtime + "</td>"+
+							"<td>" + item.positionid +"</td>"+
+						"/<tr>");
+			});
+		}else{
+			$("#import").append('<tr><td  colspan="4" style="text-align: center;">暂无快件</td></tr>')
+			$("#loading").hide();	
+		}
+	}
+</script>
+<script>
+	function checkPost(){
+		var list= new Array();
+		var param=document.getElementsByClassName('uncheck');
+		$.each(param, function(i, item) {
+			if(item.checked==true){
+				list.push(item.value);
+			}
+		});
+		if(list.length==0)return false;
+		$.ajax({
+			type: "post",
+			url: "/api/import/checkList",
+			data: {'checkOrder':list,'usrId':$("#userid").prop("value")},
+			dataType: "json",
+			success:
+				function(data){
+						var json = JSON.parse(data);
+						if(json.status==200)
+							window.location.reload();
+				}
+		});
+	}
+	;
+</script>
+</body>
+</html>

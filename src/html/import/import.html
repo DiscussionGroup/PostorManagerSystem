@@ -1,0 +1,144 @@
+@@include('../public/header.html')
+<title>这是一个邮件录入的demo演示</title>
+</head>
+
+<body>
+    <div id="pre">
+        <h3>这是一个邮件录入的demo演示</h3>
+        <p> 在本个演示用，提交了对于录入阶段表单，该表单主要信息包括
+            <p>
+                <ol>
+                    <li>快递员信息</li>
+                    <ul>
+                        <li>快递员编号</li>
+                    </ul>
+                    <li>包裹信息</li>
+                    <ul>
+                        <li>包裹编号</li>
+                        <li>包裹信息</li>
+                        <li>收件人姓名</li>
+                        <li>收件人手机号码</li>
+                    </ul>
+                    <li>仓库信息</li>
+                    <ul>
+                        <li>仓库编号</li>
+                    </ul>
+                </ol>
+            </p>
+            <input value="单击此处开始" type="button" onClick="demo()">
+    </div>
+    <div id="demo">
+        <h3>这是一个递交表单的demo，这里的开放action接口可以通过终端递交相同的request请求来获得数据</h3>
+        <form id="importTable" type="post" onsubmit="return false" action="#">
+            <table>
+                <tr>
+                    <td>postor id</td>
+                    <td>
+                        <input name="postorId" id="postorId">
+                    </td>
+                </tr>
+                <tr>
+                    <td>ordeId</td>
+                    <td>
+                        <input name="orderId" id="orderId">
+                    </td>
+                </tr>
+                <tr>
+                    <td>usrPhoneNumber</td>
+                    <td>
+                        <input name="usrPhoneNumber" id="usrPhoneNumber">
+                    </td>
+                </tr>
+                <tr>
+                    <td>orderInfo</td>
+                    <td>
+                        <textarea name="orderInfo" id="orderInfo"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>positionId</td>
+                    <td>
+                        <input name="positionId" id="positionId">
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <button class="button import">录入</button>
+				<button class="button" onClick="random()">生成随机数据</button>
+				<button class="button" onClick="randomC()">生成可录入的随机数据</button>
+            </div>
+        </form>
+    </div>
+    @@include('../public/script.html')
+    <script>
+	function random(){
+		var postorId = $("#postorId");
+		var orderId = $("#orderId");
+		var usrPhoneNumber = $("#usrPhoneNumber");
+		var usrId = $("#usrId");
+		var usrName = $("#usrName");
+		var orderInfo = $("#orderInfo");
+		var positionId = $("#positionId");
+		postorId.val([115468,122455,998879][Math.ceil(Math.random()*2)]);
+		orderId.val(Math.ceil(Math.random()*100000000));
+		usrPhoneNumber.val(Math.ceil([1.70,1.50,1.86,1.36,1.32][Math.ceil(Math.random()*4)]*1e11+Math.ceil(Math.random()*1e8)));
+		var hz="",word="";
+		for(i=0;i<60;i++){ 
+			    eval( "var word=" +  '"\\u' + (Math.round(Math.random() * 20901) + 19968).toString(16)+'"');
+			    hz += word;
+		}
+		orderInfo.val(hz);
+		positionId.val(Math.ceil(Math.random()*135));
+	}
+	
+	function randomC(){
+		var postorId = $("#postorId");
+		var orderId = $("#orderId");
+		var usrPhoneNumber = $("#usrPhoneNumber");
+		var usrId = $("#usrId");
+		var usrName = $("#usrName");
+		var orderInfo = $("#orderInfo");
+		var positionId = $("#positionId");
+		postorId.val([115468,122455,998879][Math.ceil(Math.random()*2)]);
+		orderId.val(Math.ceil(Math.random()*100000000));
+		usrPhoneNumber.val([132039336878,150012916617,186003305497][Math.ceil(Math.random()*2)])
+		var hz="",word="";
+		for(i=0;i<60;i++){ 
+			    eval( "var word=" +  '"\\u' + (Math.round(Math.random() * 20901) + 19968).toString(16)+'"');
+			    hz += word;
+		}
+		orderInfo.val(hz);
+		positionId.val(Math.ceil(Math.random()*135));
+	}
+
+    function demo() {
+        $("#pre").fadeOut();
+        $("#demo").fadeIn(3000);
+    }
+
+    function showDemo() {
+        $("#pre").show();
+    }
+    $(function() {
+        $('.import').click(function() {
+            var params = $("#importTable").serialize();
+			$.ajax({
+				    type: "post",
+				    url: "/api/import/va",
+				    data: params,
+				    success: function(data){
+                        window.location = "/import/detail.html?orderId=" + data.orderId;
+					} ,
+					error: function(data){
+                        alert(data.responseJSON.response);
+					},
+				    dataType: 'json'
+			});
+        });
+        showDemo();
+    });
+    ;
+    </script>
+</body>
+
+</html>
